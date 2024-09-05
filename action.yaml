@@ -53,8 +53,7 @@ runs:
     run: |
       curl -LO https://${{ inputs.manager-host }}/client-downloads/toolkit-linux.tgz
       tar -zxf toolkit-linux.tgz
-      ls -l
-      chmod a+x apic-slim
+     
 
   - name: Validate product
     shell: bash
