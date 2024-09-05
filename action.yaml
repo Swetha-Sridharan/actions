@@ -47,7 +47,8 @@ branding:
 runs:
   using: "composite"
   steps:
-      
+  - name: Add /usr/local/bin to PATH
+    run: echo "/usr/local/bin" >> $GITHUB_PATH    
 
   - name: Validate product
     shell: bash
