@@ -48,16 +48,16 @@ runs:
   using: "composite"
   steps:
   - name: Add /usr/local/bin to PATH
-    shell: zsh
+    shell: bash
     run: echo "/usr/local/bin" >> $GITHUB_PATH    
 
   - name: Validate product
-    shell: zsh
+    shell: bash
     run: |
       apic --accept-license --live-help validate ${{ inputs.product-file }}
 
   - name: Login to API Manager with provided credentials
-    shell: zsh
+    shell: bash
     if: ${{ inputs.validate_only == 'false' }}
     run: |
       if [[ "${{ inputs.iam-apikey }}" != "" ]]; then
@@ -80,7 +80,7 @@ runs:
 
   - name: Publish product with apic CLI
     if: ${{ inputs.validate_only == 'false' }}
-    shell: zsh
+    shell: bash
     run: |
       if [[ "${{ inputs.migrate_subscriptions }}" == "true" ]]; then
         echo "Enabling option to migrate subscriptions"
