@@ -48,7 +48,7 @@ runs:
   using: "composite"
   steps:
 
-- name: Get APIC Toolkit
+  - name: Get APIC Toolkit
     shell: bash
     run: |
       curl -LO https://${{ inputs.manager-host }}/client-downloads/toolkit-linux.tgz
