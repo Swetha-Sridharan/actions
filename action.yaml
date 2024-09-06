@@ -48,13 +48,19 @@ runs:
   using: "composite"
   steps:
 
-     
+  - name: Get APIC Toolkit
+    shell: bash
+    run: |
+      curl -LO https://${{ inputs.manager-host }}/client-downloads/toolkit-linux.tgz
+      tar -zxf toolkit-linux.tgz
 
   - name: Validate product
+    shell: bash
     run: |
-      apic --accept-license --live-help validate ${{ inputs.product-file }}
+      ./apic-slim --accept-license --live-help validate ${{ inputs.product-file }}
 
   - name: Login to API Manager with provided credentials
+    shell: bash
     if: ${{ inputs.validate_only == 'false' }}
     run: |
       if [[ "${{ inputs.iam-apikey }}" != "" ]]; then
@@ -68,18 +74,21 @@ runs:
       fi
       if [[ "${{ inputs.apikey }}" != "" ]]; then
         echo "Using apikey"
-        apic login --server ${{ inputs.api-host }} --sso --apiKey ${{ inputs.apikey }} --context provider
+        ./apic-slim login --server ${{ inputs.api-host }} --sso --apiKey ${{ inputs.apikey }} --context provider
       fi
       if [[ "${{ inputs.username }}" != "" ]]; then
         echo "Using username/password"
-        apic login --server ${{ inputs.api-host }} --username ${{ inputs.username }} --password ${{ inputs.password }} --realm ${{ inputs.realm }}
+        ./apic-slim login --server ${{ inputs.api-host }} --username ${{ inputs.username }} --password ${{ inputs.password }} --realm ${{ inputs.realm }}
       fi
 
   - name: Publish product with apic CLI
     if: ${{ inputs.validate_only == 'false' }}
+    shell: bash
     run: |
       if [[ "${{ inputs.migrate_subscriptions }}" == "true" ]]; then
         echo "Enabling option to migrate subscriptions"
         OPTIONS="--migrate_subscriptions"
       fi
-      apic products:publish --server ${{ inputs.api-host }} --org ${{ inputs.provider-org }} --catalog ${{ inputs.catalog }} $OPTIONS ${{ inputs.product-file }}
+      ./apic-slim products:publish --server ${{ inputs.api-host }} --org ${{ inputs.provider-org }} --catalog ${{ inputs.catalog }} $OPTIONS ${{ inputs.product-file }}
+
+     
